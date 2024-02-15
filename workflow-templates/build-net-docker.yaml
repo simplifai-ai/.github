@@ -1,4 +1,4 @@
-name: Build and push .net docker image
+name: Build and push .net docker image to ACR
 
 on:
   workflow_dispatch:
