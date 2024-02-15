@@ -8,12 +8,12 @@ permissions:
   contents: read
 
 env:
-  ACR_NAME_DEV: {{ variables.ACR_DEV }} # Organization variable
-  ACR_NAME_PROD: {{ variables.ACR_PROD }} # Organization variable
+  ACR_NAME_DEV: ${{ vars.ACR_DEV }} # Organization variable
+  ACR_NAME_PROD: ${{ vars.ACR_PROD }} # Organization variable
 
 on:
   workflow_dispatch:
-  pull_request:
+  push:
     branches: [ $default-branch ]
 
 jobs:
