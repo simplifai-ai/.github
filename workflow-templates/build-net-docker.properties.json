@@ -2,5 +2,5 @@
     "name": "Build and push .NET Docker image to ACR",
     "description": "This workflow will build .NET and push the image to our container registry.",
     "iconName": "dotnet",
-    "categories": ["Docker", ".NET", "Build", "Push", "Container Registry"]
+    "categories": ["C#", "Docker", ".NET", "Build", "Push", "Container Registry"]
 }
