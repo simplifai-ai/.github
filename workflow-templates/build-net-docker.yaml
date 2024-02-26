@@ -58,7 +58,8 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }} # organization secrets
         subscription-id: ${{ secrets.AZURE_DEV_SUBSCRIPTION }} # organization secrets
     
-    # Builds on ACR
+    # Build image and push to ACR
+    # No official docker action support ACR login
     - name: Build docker and push to ${{ env.CONTAINER_REGISTRY }}.
       run: |
         docker buildx build -t ${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ env.APP_VERSION }} --cache-to type=gha,mode=max --cache-from type=gha -f DOCKERFILE .
