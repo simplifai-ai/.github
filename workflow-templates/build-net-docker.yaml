@@ -12,7 +12,7 @@ env:
   APP_VERSION: v1.${{ github.run_number }} # Versioning based on run number ie v1.1, v1.2 etc
   CONTAINER_NAME: 'demo/worker' # replace with your container name
   WORKING_DIR: './src/' # replace with your csproj path
-  CONTAINER_REGISTRY: simplifaidevwesteuroperegistry
+  CONTAINER_REGISTRY: {{ env.CONTAINER_REGISTRY }}
 
 jobs:
   build:
