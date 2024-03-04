@@ -1,7 +1,7 @@
 # This is Simplifai's default .NET build and push to ACR workflow template
 # You might need to adjust the variables to fit your project
 
-name: Build and push .NET docker image to ACR
+name: Build .NET app and deploy to AKS
 
 on:
   workflow_dispatch:
@@ -15,11 +15,12 @@ on:
 
 
 env:
-  APP_VERSION: v1.${{ github.run_number }} # Versioning based on run number ie v1.1, v1.2 etc
-  CONTAINER_NAME: 'demo/worker' # replace with your container name
-  WORKING_DIR: './src/' # replace with your csproj path
-  CONTAINER_REGISTRY: {{ env.CONTAINER_REGISTRY }}
-  CS_PROJ_PATH: './src/Worker/Worker.csproj' # replace with your csproj path
+  ACR_NAME_DEV: ${{ vars.ACR_DEV }} # Organization variable
+  ACR_NAME_PROD: ${{ vars.ACR_PROD }} # Organization variable
+  APP_VERSION: v1.${{ github.run_number }}
+  CONTAINER_NAME: 'demo/worker'
+  CS_PROJ_PATH: './src/worker/worker.csproj'
+  WORKING_DIR: './src/worker/'
 
 jobs:
   build:
@@ -54,24 +55,6 @@ jobs:
       run: dotnet build
       working-directory: ${{ env.WORKING_DIR }}
 
-    - name: 🔑 Azure Login
-      uses: azure/login@v1.6.1
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID }} # organization secrets
-        tenant-id: ${{ secrets.AZURE_TENANT_ID }} # organization secrets
-        subscription-id: ${{ secrets.AZURE_DEV_SUBSCRIPTION }} # organization secrets
-    
-    # Build image and push to ACR
-    # No official docker action support ACR login
-    - name: 🐳 Build docker and push to ${{ env.CONTAINER_REGISTRY }}.
-      run: |
-        docker buildx build -t ${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ env.APP_VERSION }} --cache-to type=gha,mode=max --cache-from type=gha -f DOCKERFILE .
-        # login to ACR
-        az acr login --name ${{ env.CONTAINER_REGISTRY }}
-        docker push ${{ env.CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ env.APP_VERSION }}
-
-      working-directory: ${{ env.WORKING_DIR }}
-
     - name: 🏷️ create version tag
       run: |
         echo current version is ${{ env.APP_VERSION }}
@@ -79,4 +62,13 @@ jobs:
         git config user.email "github-actions@users.noreply.github.com"
         git tag -a ${{ env.APP_VERSION }} -m "${{ github.event.head_commit.message }}"
         git push origin ${{ env.APP_VERSION }}
+
+  # calls a central workflow to build and push the docker image  
+  deploy:
+    permissions:
+      contents: read
+      id-token: write
+    needs: [build]
+    uses: simplifai-ai/studio-workflows/.github/workflows/studio-helm-release.yaml@main
+    secrets: inherit
 
