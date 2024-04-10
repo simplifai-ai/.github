@@ -1,6 +1,0 @@
-{
-    "name": "Build Python and Push to Azure Container Registry",
-    "description": "This workflow will build Pyton image and push the image to our container registry.",
-    "iconName": "Pyton",
-    "categories": ["Py", "Docker", "Python", "Build", "Continiuous Integration", "Azure Container Registry"]
-}
