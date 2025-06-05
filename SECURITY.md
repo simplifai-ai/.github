@@ -1,6 +1,6 @@
 # Security Policy
 
-## Reporting a vulnerability of security research
+## Reporting a security vulnerability
 
 We take security seriously at Simplifai and strongly encourage responsible disclosure of any vulnerabilities affecting our SaaS platform at [studio.simplifai.ai](https://studio.simplifai.ai).
 
@@ -12,9 +12,9 @@ Please include as much detail as possible to help us understand and address the 
 - Remote code execution, XSS, etc.
 - Denial of service
 
-## Working toghether
+## Working together
 
-We value you time and appreciate you help us keep secure will work with you to have this sorted out.
+We value your time and appreciate your help in keeping our platform secure. We will work with you to resolve any issues.
 
 - **Do not** publicly disclose vulnerabilities before we have had a chance to investigate and respond.
 - We will acknowledge receipt of your report and keep you informed of our progress.
